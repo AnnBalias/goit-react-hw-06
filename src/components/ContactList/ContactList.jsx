@@ -1,15 +1,20 @@
-import { ImTerminal } from 'react-icons/im';
+import { useSelector } from 'react-redux';
 import Contact from '../Contact/Contact';
 import css from "./ContactList.module.css"
 
-const ContactList = ({ contactArr, hendDelete }) => {
+const ContactList = () => {
+
+    const contacts = useSelector(state => state.contacts.items);
+    const filter = useSelector(state => state.filter.name) || "";
+
+    const filteredData = contacts.filter(item => item.name.toLowerCase().includes(filter.toLowerCase()))
 
     return (
         <ul className={css.contList}>
-            {!contactArr.length ? <p>No suitable contacts</p> :
-             contactArr.map((item) => (        
+            {!filteredData.length ? <p>No suitable contacts</p> :
+             filteredData.map((item) => (        
                 <li key={item.id} className={css.contBox}>
-                    <Contact {...item} hendDelete={hendDelete} />
+                    <Contact {...item} />
                 </li>
             ))}
         </ul>

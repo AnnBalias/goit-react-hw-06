@@ -1,8 +1,13 @@
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoPerson } from "react-icons/io5";
+import { useDispatch } from "react-redux";
+import { deleteContact } from "../../redux/contactsSlice";
 import css from "./Contact.module.css"
 
-const Contact = ({name, number, id, hendDelete}) => {
+const Contact = ({ name, number, id }) => {
+    
+    const dispatch = useDispatch()
+
     return (
         <>
             <div className={css.contInfoBox}>
@@ -15,7 +20,7 @@ const Contact = ({name, number, id, hendDelete}) => {
                     <p>{number}</p>
                 </div>
             </div>
-            <button onClick={() => hendDelete(id)} className={css.contBtn}>
+            <button onClick={() => dispatch(deleteContact(id))} className={css.contBtn}>
                 Delete
             </button>
         </>

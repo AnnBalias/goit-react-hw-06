@@ -1,8 +1,10 @@
 import { useId } from "react";
+import { useDispatch } from "react-redux";
 import { Field, Form, Formik, ErrorMessage } from 'formik';
-import * as Yup from 'yup'
-import css from "./ContactForm.module.css"
 import { nanoid } from "nanoid";
+import * as Yup from 'yup'
+import { addContact } from "../../redux/contactsSlice";
+import css from "./ContactForm.module.css"
 
 const check = Yup.object({
     name: Yup.string()
@@ -20,43 +22,50 @@ const check = Yup.object({
         .matches(/^[0-9]+-/, "Number must contain only digits" )
 })
 
-const ContactForm = ({ handleAdd }) => {
-    
-    const initialValues = {
-        name: "",
-        number: ""
+const ContactForm = () => {
+
+    const dispatch = useDispatch();
+    const handSub = (values, actions) => {
+        const newCont = {
+            id: nanoid(),
+            name: values.name,
+            number: values.number,
+        }
+        dispatch(addContact(newCont));
+        actions.resetForm();
     }
     
     const nameFieldId = useId();
     const numberFieldId = useId();
 
-    const handSub = (values, actions) => {
-        handleAdd({
-            id: nanoid(),
-            name: values.name,
-            number: values.number,
-        })
-        actions.resetForm();
-    }
-
     return (
         <Formik
-            initialValues={initialValues}
             onSubmit={handSub}
-            validationSchema={check}>
+            validationSchema={check}
+            initialValues={{ name: "", number: "" }}>
             <Form className={css.addForm}>
                 <div className={css.formInpBox}>
                     <label className={css.formLabel} htmlFor={nameFieldId}>
                         Name
                     </label>
-                    <Field className={css.formField} type="text" name="name" />
+                    <Field
+                        className={css.formField}
+                        id={nameFieldId}
+                        type="text"
+                        name="name"
+                    />
                     <ErrorMessage name="name" component="p" className={css.error} />
                 </div>
                 <div className={css.formInpBox}>
                     <label className={css.formLabel} htmlFor={numberFieldId}>
                         Number
                     </label>
-                    <Field className={css.formField} type="text" name="number" />
+                    <Field
+                        className={css.formField}
+                        id={numberFieldId}
+                        type="text"
+                        name="number"
+                    />
                     <ErrorMessage name="number" component="p" className={css.error} />
                 </div>
                 <button type='submit' className={css.formBtn}>

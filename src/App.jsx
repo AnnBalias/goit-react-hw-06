@@ -7,39 +7,18 @@ import ContactList from './components/ContactList/ContactList';
 import contacts from "./contacts.json";
 // import styles
 import './App.css'
+import { useDispatch, useSelector } from 'react-redux';
+// import { addContact } from './redux/contactsSlice';
+
 
 const App = () => {
-  const [contactsList, setContactList] = useState(() => {
-    const localData = JSON.parse(localStorage.getItem("contacts"));
-      if (localData) {
-        return localData;
-      }
-    return contacts
-  });
-// ooooooooooooooooooooooooooo
-  const handleAdd = (newCont) => {
-    setContactList((prev) => [...prev, newCont])
-	};
-// ooooooooooooooooooooooooooo 
-  const [search, setSearch] = useState("");
-
-  const handSearch = contactsList.filter(item => item.name.toLowerCase().includes(search.toLocaleLowerCase()))
-
-  const hendDelete = (id) => {
-    const newContactsList = contactsList.filter((item) => item.id !== id);
-    setContactList(newContactsList);
-  }
-
-  useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contactsList))
-  }, [contactsList])
   
   return (
     <div>
       <h1 className='header'>Phonebook</h1>
-      <ContactForm handleAdd={handleAdd} />
-      <SearchBox search={search} setSearch={setSearch}/>
-      <ContactList contactArr={ handSearch } hendDelete={hendDelete} />
+      <ContactForm />
+      <SearchBox />
+      <ContactList />
     </div>
   );
 };
